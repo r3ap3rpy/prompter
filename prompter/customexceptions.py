@@ -24,3 +24,9 @@ class PrompterSectionValueExists(PrompterException):
 
 class PrompterDeletionArgsError(PrompterException):
     ...
+
+class PrompterSectionDeleteException(PrompterException):
+    ...
+
+class PrompterAddError(PrompterException):
+    ...
