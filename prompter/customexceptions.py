@@ -30,3 +30,6 @@ class PrompterSectionDeleteException(PrompterException):
 
 class PrompterAddError(PrompterException):
     ...
+
+class PrompterSectionAddException(PrompterException):
+    ...

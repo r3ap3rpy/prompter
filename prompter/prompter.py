@@ -33,20 +33,21 @@ class PromptGenerator:
     def __call__(self):
         return f"{random.choice(self.data['people'])} {random.choice(self.data['activity']).lower()} at {random.choice(self.data['location'])}."
 
-    def update(self, section, value):
+    def update(self, section, old_value, new_value, all_occurence = False):
         if not section.lower() in self.sections:
             raise PrompterSectionUpdateException(f"Either the following sections are allowed to be updated: {','.join(self.sections)}")
-        if value.lower() in [ _.lower() for _ in self.data[section.lower()]]:
-            raise PrompterSectionValueExists(f"The specified value: {value} is already in section: {section}, not updating")
-
-        self.data[section.lower()].append(value)
-
+        if all_occurence:
+            while (count := self.data[section.lower()].count(old_value)) != 0:
+                self.data[section.lower()][self.data[section.lower()].index(old_value)] = new_value
+        else:
+            if self.data[section.lower()].count(old_value): 
+                self.data[section.lower()][self.data[section.lower()].index(old_value)] = new_value
         with open(os.path.sep.join([self.module,self.folder,self.file]),'w') as jfile:
             jfile.write(json.dumps(self.data))
-    def delete(self, *args):
+    def delete(self, *args, all_occurence = False):
+        """ Deletes a virtual row from the data.json, finds the index matching the row and deletes the item at index from all rows. """
         if len(args) == 2:
             section, value = args
-            print(f"Deleting {value} from the {section}!")
             if not section.lower() in self.sections:
                 raise PrompterSectionDeleteException(f"The specified section {section} does not exist, these are the available sections: {','.join(self.sections)}")
             if value in self.data[section.lower()]:
@@ -57,7 +58,15 @@ class PromptGenerator:
                 raise PrompterSectionDeleteException(f"The specified value {value} does not exist in section: {section}, cannot delete!")
         elif len(args) == 1:
             value = args[0]
-            print(f"Deleting {value} from all the sections!")
+            for section in self.sections:
+                if all_occurence:
+                    while (count := self.data[section].count(value)) != 0:
+                        self.data[section].remove(value)
+                else:
+                    if self.data[section].count(value):
+                        self.data[section].remove(value)
+            with open(os.path.sep.join([self.module,self.folder,self.file]),'w') as jfile:
+                jfile.write(json.dumps(self.data)) 
         else:
             raise PrompterDeletionArgsError("You either have to speciy one argument to delete value from all the sections, or specify section and value to delete only from the given section.")
 
@@ -75,9 +84,18 @@ class PromptGenerator:
                 self.data[list(self.sections)[i]].append(args[i])
             with open(os.path.sep.join([self.module,self.folder,self.file]),'w') as jfile:
                 jfile.write(json.dumps(self.data)) 
-            print(f"Successfully added {','.join(args)}")
         except Exception as e:
             raise PrompterAddError(f"Failed to add new data because: {e}")
+
+    def add_to_section(self, section, value):
+        """ This function will add a given value to the specified section """
+        if not section.lower() in self.sections:
+            raise PrompterSectionAddException(f"The specified section {section} does not exist, these are the available sections: {','.join(self.sections)}")
+        if value in self.data[section.lower()]:
+            raise PrompterSectionAddException(f"The specified value is already in the section: {section}")
+        self.data[section.lower()].append(value)
+        with open(os.path.sep.join([self.module,self.folder,self.file]),'w') as jfile:
+            jfile.write(json.dumps(self.data)) 
 
     def widest_cell(self):
         """ Returns the width of the widest cell in the table, used for formatting. """
@@ -93,7 +111,10 @@ class PromptGenerator:
     def longest_section(self):
         """ Returns the longest section's length. """
         return max(len(self.data[key]) for key in self.data.keys()) 
-
+    
+    @property
+    def raw_data(self):
+        return self.data
     @property
     def stats(self):
         """ Function to print short stats about sections and number of values. """
