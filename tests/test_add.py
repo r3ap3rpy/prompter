@@ -1,6 +1,4 @@
 from unittest import TestCase
-from sys import path
-path.append('..')
 from prompter.prompter import *
 import pytest
 
