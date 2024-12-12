@@ -1,0 +1,5 @@
+prompter/__pycache__
+tests/__pycache__
+prompter/data
+!prompter/data/data.json
+!prompter/data/data.json.original
