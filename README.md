@@ -44,3 +44,4 @@ p.stats
 
 The **details** attribute will print the content in a table format to your terminal.
 
+You have **restore_db()** which is a static method, it allows you to restore any backups in the **data** folder, the **backup_db()** which is an instance method allows you to backup the actual state of the database to a default or custom filename!
