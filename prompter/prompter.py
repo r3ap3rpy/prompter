@@ -1,5 +1,7 @@
-import json, os, random
+import json, os, random, shutil
 from .customexceptions import *
+from sys import exit
+from datetime import datetime
 
 dirname, filename = os.path.split(os.path.abspath(__file__))
 
@@ -9,6 +11,7 @@ class PromptGenerator:
         self.module = module
         self.folder = folder
         self.file = file
+
         if not os.path.isfile(os.path.sep.join([module,folder,file])):
             raise PromptDataFileNotFound(f"Cannot find file {file} at location {os.path.sep.join([module,folder])}")
 
@@ -111,7 +114,61 @@ class PromptGenerator:
     def longest_section(self):
         """ Returns the longest section's length. """
         return max(len(self.data[key]) for key in self.data.keys()) 
+
+    @staticmethod
+    def restore_db(original = False):
+        """ This function restores backup from either the origin or the selected file. """
+        dirname, _ = os.path.split(os.path.abspath(__file__))
+        origin = os.path.sep.join([dirname, 'data','data.json.original'])
+        if original:
+            print("Overwriting the data.json file with data.json.original")
+            if os.path.isfile(origin):
+                try:
+                    shutil.copy(origin, os.path.sep.join([dirname, 'data','data.json']))
+                except Exception as e:
+                    raise PrompterRestoreOriginalCopyError(f"Could not restore data.json.original because of the following error when calling shutil.copy : {e}") 
+            else:
+                raise PrompterRestoreOriginalDbNotFound(f"Cannot find origin at {origin}, restore is impossible!") 
+        else:
+            backups = [ _ for _ in os.listdir(os.path.sep.join([dirname,'data'])) if (not _ in ['data.json.original','data.json']) and ('.json' in _)]
+            if backups:
+                backups.append('Exit')
+                options = [ _ for _ in enumerate(backups)]
+                os.system('clear')
+                print("Available backups: ")
+                for _ in options:
+                    print(f"\t {_[0]} - {_[1]}")
+                while not (choice := int(input("Which one to restore: "))) in [_[0] for _ in options]:
+                    os.system('clear')
+                    print("Available backups: ")
+                    for _ in options:
+                        print(f"\t {_[0]} - {_[1]}")
+                print(f"You have choosen: {options[choice][1]}")
+                if options[choice][1] == 'Exit':
+                    print("Skipping restore...")
+                else:
+                    print("Restoring file...")
+                    to_restore = os.path.sep.join([dirname, 'data', options[choice][1]])
+                    data_file = os.path.sep.join([dirname, 'data', 'data.json']) 
+                    shutil.copy(to_restore, data_file)
+            else:
+                raise PrompterRestoreNoBackupsFound("No valid backups were found, restore is impossible!")
     
+    def backup_db(self, backup_file = None):
+        """ This function creates a new backup from the database in-memory to a given filename or a filename with the timestamp. """
+        print("Save  database with timestamp!")
+        if backup_file is not None:
+            backup_file += "_data.json"
+            print(f"Saving database with name: {backup_file}")
+        else:
+            stamp = datetime.now()
+            backup_file = f"{stamp.year}_{stamp.month}_{stamp.day}_{stamp.hour}_{stamp.minute}_{stamp.second}_data.json"
+            print(f"Using timestamp based backup: {backup_file}")
+        with open(os.path.sep.join([self.module,self.folder,backup_file]),'w') as jfile:
+            jfile.write(json.dumps(self.data)) 
+
+
+
     @property
     def raw_data(self):
         return self.data
@@ -129,7 +186,6 @@ class PromptGenerator:
         """ Detailed information about the data.json content. """
         max_length = self.longest_section()
         column_width = self.widest_cell()
-        print(f"Widest cell: {column_width}")
         print("#" * (column_width * len(self.data) + padding))
         print("# " +" # ".join(f"{key:^{column_width}}" for key in self.data.keys()) + " #")
         print("#" * (column_width * len(self.data) + padding))
