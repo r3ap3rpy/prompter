@@ -116,7 +116,7 @@ class PromptGenerator:
         return max(len(self.data[key]) for key in self.data.keys()) 
 
     @staticmethod
-    def restore_db(original = False):
+    def restore_db(original = False, backup_file = None):
         """ This function restores backup from either the origin or the selected file. """
         dirname, _ = os.path.split(os.path.abspath(__file__))
         origin = os.path.sep.join([dirname, 'data','data.json.original'])
@@ -128,31 +128,39 @@ class PromptGenerator:
                 except Exception as e:
                     raise PrompterRestoreOriginalCopyError(f"Could not restore data.json.original because of the following error when calling shutil.copy : {e}") 
             else:
-                raise PrompterRestoreOriginalDbNotFound(f"Cannot find origin at {origin}, restore is impossible!") 
+                raise PrompterRestoreOriginalDbNotFound(f"Cannot find origin at {origin}, restore is impossible!")
+            return True
         else:
-            backups = [ _ for _ in os.listdir(os.path.sep.join([dirname,'data'])) if (not _ in ['data.json.original','data.json']) and ('.json' in _)]
-            if backups:
-                backups.append('Exit')
-                options = [ _ for _ in enumerate(backups)]
-                os.system('clear')
-                print("Available backups: ")
-                for _ in options:
-                    print(f"\t {_[0]} - {_[1]}")
-                while not (choice := int(input("Which one to restore: "))) in [_[0] for _ in options]:
+            if backup_file is not None:
+                print(f"Restoring specified file: {backup_file}")
+                to_restore = os.path.sep.join([dirname, 'data', backup_file])
+                data_file = os.path.sep.join([dirname, 'data', 'data.json']) 
+                shutil.copy(to_restore, data_file)
+                return True
+            else:
+                backups = [ _ for _ in os.listdir(os.path.sep.join([dirname,'data'])) if (not _ in ['data.json.original','data.json']) and ('.json' in _)]
+                if backups:
+                    backups.append('Exit')
+                    options = [ _ for _ in enumerate(backups)]
                     os.system('clear')
                     print("Available backups: ")
                     for _ in options:
                         print(f"\t {_[0]} - {_[1]}")
-                print(f"You have choosen: {options[choice][1]}")
-                if options[choice][1] == 'Exit':
-                    print("Skipping restore...")
+                    while not (choice := int(input("Which one to restore: "))) in [_[0] for _ in options]:
+                        os.system('clear')
+                        print("Available backups: ")
+                        for _ in options:
+                            print(f"\t {_[0]} - {_[1]}")
+                    print(f"You have choosen: {options[choice][1]}")
+                    if options[choice][1] == 'Exit':
+                        print("Skipping restore...")
+                    else:
+                        print("Restoring file...")
+                        to_restore = os.path.sep.join([dirname, 'data', options[choice][1]])
+                        data_file = os.path.sep.join([dirname, 'data', 'data.json']) 
+                        shutil.copy(to_restore, data_file)
                 else:
-                    print("Restoring file...")
-                    to_restore = os.path.sep.join([dirname, 'data', options[choice][1]])
-                    data_file = os.path.sep.join([dirname, 'data', 'data.json']) 
-                    shutil.copy(to_restore, data_file)
-            else:
-                raise PrompterRestoreNoBackupsFound("No valid backups were found, restore is impossible!")
+                    raise PrompterRestoreNoBackupsFound("No valid backups were found, restore is impossible!")
     
     def backup_db(self, backup_file = None):
         """ This function creates a new backup from the database in-memory to a given filename or a filename with the timestamp. """
@@ -165,7 +173,8 @@ class PromptGenerator:
             backup_file = f"{stamp.year}_{stamp.month}_{stamp.day}_{stamp.hour}_{stamp.minute}_{stamp.second}_data.json"
             print(f"Using timestamp based backup: {backup_file}")
         with open(os.path.sep.join([self.module,self.folder,backup_file]),'w') as jfile:
-            jfile.write(json.dumps(self.data)) 
+            jfile.write(json.dumps(self.data))
+        return True
 
 
 
