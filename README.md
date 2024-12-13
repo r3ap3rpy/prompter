@@ -2,7 +2,15 @@
 
 This is a small module that can be used to generate prompts for text-to-image generative AI.
 
-All you have to do is import the module and use it as follows.
+The package is available on [pypi](https://pypi.org/project/prompter-r3ap3rpy).
+
+In order to install the package you would use the following command.
+
+``` bash
+pip install propmpter-r3ap3rpy
+```
+
+Then all you have to do is import the module and use it as follows.
 
 ``` python
 from prompter import PromptGenerator
@@ -45,3 +53,12 @@ p.stats
 The **details** attribute will print the content in a table format to your terminal.
 
 You have **restore_db()** which is a static method, it allows you to restore any backups in the **data** folder, the **backup_db()** which is an instance method allows you to backup the actual state of the database to a default or custom filename!
+
+In order to run the tests you can do the following.
+
+``` bash
+git clone https://github.com/r3ap3rpy/prompter
+cd prompter
+pip install -r requirements.txt
+pytest -vvvvv
+```
