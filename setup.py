@@ -20,7 +20,7 @@ def get_version(rel_path):
         raise RuntimeError("Unable to find version string.")
 setup(
     name="prompter-r3ap3rpy",
-    version = get_version('pytail/__init__.py'),
+    version = get_version('prompter/__init__.py'),
     long_description = readme(),
     long_description_content_type = "text/markdown",
     author = "Szabó Dániel Ernő",
@@ -29,7 +29,6 @@ setup(
     license = "MIT",
     packages=find_packages(),
     python_requires='>=3.10.0',
-    scripts=["bin/pytail"],
     classifiers= [
         "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
