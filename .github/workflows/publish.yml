@@ -16,6 +16,20 @@ jobs:
       - run: |
           python3 -m pip install --upgrade pytest
           pytest -vvvvv
+  bumpVersion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          .github/scripts/version.py
+          git config user.name r3ap3rpy
+          git config user.email r3ap3rpy@gmail.com 
+          git add .
+          git commit -m "Version bumped!"
+          git push
   buldAndPublish:
     runs-on: ubuntu-latest
     steps:
