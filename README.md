@@ -15,7 +15,12 @@ Then all you have to do is import the module and use it as follows.
 ``` python
 from prompter import PromptGenerator
 p = PromptGenerator()
-'Dani Szabó volunteering at Johannesburg.'
+p()
+'Madonna grilling at Jerusalem.'
+p()
+'Natalie Portman cycling at Mumbai.'
+p()
+'John von Neumann baseball at Tower of London.'
 ```
 
 You have the option to update the **data.json**.
