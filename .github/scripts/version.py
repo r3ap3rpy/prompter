@@ -11,13 +11,13 @@ build = int(build)
 print(major,minor,build)
 build += 1
 if build > 9:
-	minor += 1
-	build = 0
+    minor += 1
+    build = 0
 if minor > 9:
-	major += 1
-	minor = 0
+    major += 1
+    minor = 0
 with open('prompter/__init__.py','w') as initfile:
-	initfile.write('from .prompter import *\n')
+    initfile.write('from .prompter import *\n')
     initfile.write('from .customexceptions import *\n')
-	initfile.write(f"__version__ = '{major}.{minor}.{build}'\n")
+    initfile.write(f"__version__ = '{major}.{minor}.{build}'\n")
 print(major,minor,build)
