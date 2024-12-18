@@ -1,4 +1,5 @@
 """ Test cases for adding information to the database """
+
 from unittest import TestCase
 import pytest
 from prompter.prompter import PromptGenerator,PrompterAddError,PrompterSectionAddException

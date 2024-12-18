@@ -1,4 +1,5 @@
 """ Test for the structure of the internal database """
+
 from unittest import TestCase
 from prompter.prompter import PromptGenerator
 

@@ -1,4 +1,5 @@
 """ Testing backup and restore functionality. """
+
 from unittest import TestCase
 from prompter.prompter import PromptGenerator, os, datetime
 
