@@ -1,5 +1,5 @@
-""" This script is used to bumpt the version of the module. """
 #!/usr/bin/env python3
+""" This script is used to bump the module version """
 with open('prompter/__init__.py', encoding = "utf-8") as initfile:
     version = next(iter([ _.strip() for _ in initfile.readlines() if '__version__' in _ ]))
 
