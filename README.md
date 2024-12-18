@@ -67,3 +67,6 @@ cd prompter
 pip install -r requirements.txt
 pytest -vvvvv
 ```
+
+You can also use **pylint**, currently the passing score is **9,5**, the workflow will fail if score goes under it.
+
