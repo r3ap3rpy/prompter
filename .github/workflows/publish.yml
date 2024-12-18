@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
-          python3 -m pip install --upgrade pylint
+          python3 -m pip install --upgrade pylint pytest
           pylint .
   bumpVersion:
     runs-on: ubuntu-latest
