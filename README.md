@@ -1,5 +1,7 @@
 ### Welcome
 
+[![Publish to PyPI.org](https://github.com/r3ap3rpy/prompter/actions/workflows/publish.yml/badge.svg)](https://github.com/r3ap3rpy/prompter/actions/workflows/publish.yml)
+
 This is a small module that can be used to generate prompts for text-to-image generative AI.
 
 The package is available on [pypi](https://pypi.org/project/prompter-r3ap3rpy).
