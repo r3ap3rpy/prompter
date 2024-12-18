@@ -6,7 +6,8 @@ on:
   release:
     types: [published]
 jobs:
-  runTests:
+  job1:
+    name: Run tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,7 +17,9 @@ jobs:
       - run: |
           python3 -m pip install --upgrade pytest
           pytest -vvvvv
-  runLinter:
+  job2:
+    name: Run linter
+    needs: job1
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,7 +29,9 @@ jobs:
       - run: |
           python3 -m pip install --upgrade pylint pytest
           pylint --fail-under=9.5 .
-  bumpVersion:
+  job3:
+    name: Bump package version
+    needs: job2
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,7 +45,9 @@ jobs:
           git add .
           git commit -m "Version bumped!"
           git push
-  buldAndPublish:
+  job4:
+    name: Build and publish on PyPi
+    needs: job3
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
