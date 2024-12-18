@@ -1,6 +1,7 @@
+""" This script is used to bumpt the version of the module. """
 #!/usr/bin/env python3
-with open('prompter/__init__.py') as initfile:
-	version = next(iter([ _.strip() for _ in initfile.readlines() if '__version__' in _ ]))
+with open('prompter/__init__.py', encoding = "utf-8") as initfile:
+    version = next(iter([ _.strip() for _ in initfile.readlines() if '__version__' in _ ]))
 
 version = version.split(' = ')[-1].replace("'",'')
 print(f"Old version {version}")
@@ -16,7 +17,8 @@ if build > 9:
 if minor > 9:
     major += 1
     minor = 0
-with open('prompter/__init__.py','w') as initfile:
+with open('prompter/__init__.py','w', encoding = "utf-8") as initfile:
+    initfile.write('""" Initialize module for import """')
     initfile.write('from .prompter import *\n')
     initfile.write('from .customexceptions import *\n')
     initfile.write(f"__version__ = '{major}.{minor}.{build}'\n")

@@ -1,23 +1,31 @@
+""" This module provides a class that can generate random prompts with who-what-when template. """
+
+import codecs
+import os
 from setuptools import setup
 from setuptools import find_packages
-import codecs, os
 
 def readme():
-    with open("README.md") as file:
+    """ Reads the README.md from file """
+    with open("README.md", encoding = "utf-8") as file:
         return file.read()
 
 def read(rel_path):
+    """ Helper module to read version """
     here = os.path.abspath(os.path.dirname(__file__))
-    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
+    with codecs.open(os.path.join(here, rel_path), encoding = "utf-8") as fp:
         return fp.read()
 
 def get_version(rel_path):
+    """ Processes __version__ from __init__ file """
     for line in read(rel_path).splitlines():
         if line.startswith('__version__'):
             delim = '"' if '"' in line else "'"
-            return line.split(delim)[1]
+            break
     else:
         raise RuntimeError("Unable to find version string.")
+    return line.split(delim)[1]
+
 setup(
     name="prompter-r3ap3rpy",
     version = get_version('prompter/__init__.py'),

@@ -1,0 +1,4 @@
+[MESSAGES CONTROL]
+disable=wildcard-import,unused-variable,consider-using-enumerate,consider-using-max-builtin,invalid-name,unnecessary-ellipsis,property-with-parameters
+[FORMAT]
+max-line-length=240

@@ -16,6 +16,16 @@ jobs:
       - run: |
           python3 -m pip install --upgrade pytest
           pytest -vvvvv
+  runLinter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          python3 -m pip install --upgrade pylint
+          pylint .
   bumpVersion:
     runs-on: ubuntu-latest
     steps:
