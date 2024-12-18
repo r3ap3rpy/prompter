@@ -18,7 +18,7 @@ if minor > 9:
     major += 1
     minor = 0
 with open('prompter/__init__.py','w', encoding = "utf-8") as initfile:
-    initfile.write('\"\"\" Initialize module for import \"\"\"')
+    initfile.write('\"\"\" Initialize module for import \"\"\"\n')
     initfile.write('from .prompter import *\n')
     initfile.write('from .customexceptions import *\n')
     initfile.write(f"__version__ = '{major}.{minor}.{build}'\n")
