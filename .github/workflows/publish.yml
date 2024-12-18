@@ -50,9 +50,7 @@ jobs:
         run: |
           sha_new=$(git rev-parse HEAD)
           echo $sha_new
-          echo "::set-output name=SHA::$sha_new"
-      - run:
-          echo ${{ steps.sha.outputs.SHA }}
+          echo "sha_new={$sha_new}" >> $GITHUB_OUTPUT
   job4:
     name: Build and publish on PyPi
     needs: job3
