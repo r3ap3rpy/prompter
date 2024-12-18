@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
       - run: |
           python3 -m pip install --upgrade pylint pytest
-          pylint --fail-under=9.5 .
+          pylint --fail-under=9.9 .
   job3:
     name: Bump package version
     needs: job2
