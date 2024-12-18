@@ -1,1 +1,1 @@
-recursive-include prompter/data *
+recursive-include prompter *
