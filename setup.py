@@ -28,6 +28,7 @@ def get_version(rel_path):
 
 setup(
     name="prompter-r3ap3rpy",
+    description="Prompt your text-to-image AI",
     version = get_version('prompter/__init__.py'),
     long_description = readme(),
     long_description_content_type = "text/markdown",
