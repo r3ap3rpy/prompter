@@ -45,9 +45,6 @@ jobs:
           git add .
           git commit -m "Version bumped!"
           git push
-      - name: Get latest SHA
-        id: sha
-        run: |
           sha_new=$(git rev-parse HEAD)
           echo $sha_new
           echo "sha_new={$sha_new}" >> $GITHUB_OUTPUT
@@ -59,7 +56,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-         ref: ${{ needs.job3.outputs.new_sha }}
+         ref: ${{ needs.job3.outputs.sha_new }}
          fetch-depth: 0
       - run: |
           python3 -m pip install --upgrade build && python3 -m build
