@@ -26,6 +26,7 @@ setup(
     author = "Szabó Dániel Ernő",
     author_email = "r3ap3rpy@gmail.com",
     url = "https://pypi.org/project/prompter-r3ap3rpy/",
+    include_package_data = True,
     license = "MIT",
     packages=find_packages(),
     python_requires='>=3.10.0',
