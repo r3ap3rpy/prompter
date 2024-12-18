@@ -45,6 +45,14 @@ jobs:
           git add .
           git commit -m "Version bumped!"
           git push
+      - name: Get latest SHA
+        id: sha
+        run: |
+          sha_new=$(git rev-parse HEAD)
+          echo $sha_new
+          echo "::set-output name=SHA::$sha_new"
+      - run:
+          echo ${{ steps.sha.outputs.SHA }}
   job4:
     name: Build and publish on PyPi
     needs: job3
@@ -53,6 +61,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+         ref: ${{ needs.job3.outputs.new_sha }}
          fetch-depth: 0
       - run: |
           python3 -m pip install --upgrade build && python3 -m build
