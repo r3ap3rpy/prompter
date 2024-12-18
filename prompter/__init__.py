@@ -1,4 +1,4 @@
 """ Initialize module for import """
 from .prompter import *
 from .customexceptions import *
-__version__ = '0.1.5'
+__version__ = '0.1.6'
