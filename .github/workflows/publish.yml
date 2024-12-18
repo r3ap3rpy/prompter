@@ -51,8 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Reset main to get latest commit
+        uses: actions/checkout@v3
         shell: bash
-        run: |
+      - run: |
           echo "Triggered by commit $(git log -1 --format='%H')"
           git pull --no-commit
           git reset --hard origin/main
