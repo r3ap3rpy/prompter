@@ -30,7 +30,7 @@ class PromptGenerator:
             raise SystemExit(f"The following error prevented initialization: {e}") from e
 
         if not self.data:
-            raise PromptDataEmpty("The file was empty, cannot find any sections!")
+            raise PromptDataEmpty("The file was empty, can't find any sections!")
 
         self.sections = self.data.keys()
 
